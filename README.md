@@ -1,1 +1,1 @@
-This is a project to attempt to use Artificial Intelligence to identify a knife
+We are creating a project for HTV8
