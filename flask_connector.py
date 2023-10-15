@@ -1,12 +1,13 @@
 from flask import Flask, render_template, request
 import os
+import random
 
 app = Flask(__name__)
 
 folder_path = "static/images/pistols_jpgs/"
 file_names = os.listdir(folder_path)
 
-current_index = 50
+current_index = random.randint(100, 900)
 current_image = folder_path + file_names[0]
 
 
