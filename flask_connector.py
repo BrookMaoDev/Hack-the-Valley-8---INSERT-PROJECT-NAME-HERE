@@ -25,4 +25,4 @@ def next_image():
     return render_template('index.html', gun_exists="New text", image_path=current_image, current_image=current_image)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug = True)
