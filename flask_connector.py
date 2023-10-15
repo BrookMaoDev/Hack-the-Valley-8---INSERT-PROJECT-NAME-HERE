@@ -1,28 +1,39 @@
 from flask import Flask, render_template, request
+import os
 
 app = Flask(__name__)
 
-# Initialize the current_image variable
-current_image = "/static/your-image.jpg"
+folder_path = "static/images/pistols_jpgs/"
+file_names = os.listdir(folder_path)
 
-@app.route('/')
+current_index = 0
+current_image = folder_path + file_names[0]
+
+
+@app.route("/")
 def index():
-    gun_exists = "Gun exists"  # Replace with the actual text you want to pass
+    gun_exists = "Gun Exists"  # Replace with the actual text you want to pass
 
-    return render_template('index.html', gun_exists=gun_exists, image_path=current_image, current_image=current_image)
+    return render_template(
+        "index.html", gun_exists=gun_exists, image_path=current_image
+    )
 
-@app.route('/next_image', methods=['POST'])
+
+@app.route("/next_image", methods=["POST"])
 def next_image():
-    global current_image  # Make sure to use the global variable
+    global current_image
+    global current_index
 
-    # Get the current image from the form data
-    current_image = request.form['current_image']
+    current_image = folder_path + file_names[current_index]
+    current_index += 1
 
-    # Implement your logic to get the next image (update current_image)
-    # For example:
-    # current_image = "/static/next-image.jpg"
+    return render_template(
+        "index.html",
+        gun_exists="Gun Exists",
+        image_path=current_image,
+        current_image=current_image,
+    )
 
-    return render_template('index.html', gun_exists="New text", image_path=current_image, current_image=current_image)
 
-if __name__ == '__main__':
-    app.run(debug = True)
+if __name__ == "__main__":
+    app.run(debug=True)
