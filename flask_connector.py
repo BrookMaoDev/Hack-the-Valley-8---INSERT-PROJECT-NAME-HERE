@@ -11,7 +11,7 @@ current_image = folder_path + file_names[0]
 
 
 @app.route("/")
-def index():
+def home():
     return render_template("home.html")
 
 
@@ -24,7 +24,7 @@ def next_image():
     current_index += 1
 
     return render_template(
-        "index.html",
+        "picture_rotator.html",
         gun_exists="Gun Exists",
         image_path=current_image,
         current_image=current_image,
