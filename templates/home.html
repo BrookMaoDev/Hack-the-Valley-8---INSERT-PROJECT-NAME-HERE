@@ -3,45 +3,48 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Quicksand&display=swap"
+      rel="stylesheet"
+    />
     <title>Welcome to INSERT PROJECT NAME HERE</title>
     <style>
       body {
-        font-family: Arial, sans-serif;
+        font-family: "Quicksand", normal;
         text-align: center;
-        background-color: #f4f4f4;
+        background-color: #eeebea; /* Set background color to white */
       }
 
       header {
-        background-color: #007bff;
-        color: #fff;
-        padding: 20px;
+        background-color: #eeebea;
       }
 
       h1 {
-        font-size: 2rem;
+        font-size: 4.5rem;
+        word-wrap: break-word; /* Apply text wrapping */
+        padding-top: 150px;
       }
 
       p {
-        font-size: 1.2rem;
+        font-size: 2rem;
+        max-width: 70%; /* Set a hard border, e.g., 70% of the screen width */
+        margin: 0 auto; /* Center the paragraph within the container */
       }
     </style>
   </head>
 
   <body>
     <header>
-      <h1>Welcome to INSERT PROJECT NAME HERE</h1>
+      <h1>AI Powered Violence Detection</h1>
     </header>
     <main>
-      <p>
-        This is the official welcome page for our exciting project, INSERT
-        PROJECT NAME HERE. We are thrilled to have you on board!
-      </p>
-      <p>
-        Feel free to explore and learn more about what we have in store for you.
+      <p style="padding-top: 20px; padding-bottom: 70px;">
+        Eliminating the burden of continuous human surveillance for enhanced
+        safety and rapid response.
       </p>
 
       <form method="POST" action="/next_image">
-        <input type="hidden" name="current_image" value="{{ current_image }}" />
+        <input type="hidden" name="current_image" value="{{ current_image }}"/>
         <button
           type="submit"
           style="
