@@ -1,19 +1,29 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <!-- ... (head content) ... -->
-</head>
+  </head>
 
-<body style="background: #000;">
-    <div style="text-align: center;">
-        <img src="{{ image_path }}" alt="Image" width="200">
-        <p style="color: Violet; font-size: 24px;">{{ gun_exists }}</p>
-        <form method="POST" action="/next_image">
-            <input type="hidden" name="current_image" value="{{ current_image }}">
-            <button type="submit" style="background: Violet; color: white; padding: 10px 20px; font-size: 18px; border: none; cursor: pointer;">Next Image</button>
-        </form>
+  <body style="background: #000">
+    <div style="text-align: center">
+      <img src="{{ image_path }}" alt="Image" width="500" />
+      <p style="color: Violet; font-size: 24px">{{ gun_exists }}</p>
+      <form method="POST" action="/next_image">
+        <input type="hidden" name="current_image" value="{{ current_image }}" />
+        <button
+          type="submit"
+          style="
+            background: Violet;
+            color: white;
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+          "
+        >
+          Next Image
+        </button>
+      </form>
     </div>
-</body>
-
+  </body>
 </html>
