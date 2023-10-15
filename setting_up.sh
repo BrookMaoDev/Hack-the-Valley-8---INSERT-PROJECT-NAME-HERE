@@ -11,9 +11,6 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     echo $my_string
 
 elif [[ "$OSTYPE" == "win32" ]]; then
-    # for /f %i in ('dir /b object_detection\protos\*.proto') do protoc object_detection\protos\%i --python_out=.
-    # for compiling all proto files
-    
     pip install -r requirements.txt
     pip install cython
     pip install git+https://github.com/philferriere/cocoapi.git
