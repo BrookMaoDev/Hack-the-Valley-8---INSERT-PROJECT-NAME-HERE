@@ -12,11 +12,7 @@ current_image = folder_path + file_names[0]
 
 @app.route("/")
 def index():
-    gun_exists = "Gun Exists"  # Replace with the actual text you want to pass
-
-    return render_template(
-        "index.html", gun_exists=gun_exists, image_path=current_image
-    )
+    return render_template("home.html")
 
 
 @app.route("/next_image", methods=["POST"])
