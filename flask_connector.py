@@ -9,7 +9,7 @@ current_image = "/static/your-image.jpg"
 def index():
     gun_exists = "Gun exists"  # Replace with the actual text you want to pass
 
-    return render_template('your_template.html', gun_exists=gun_exists, image_path=current_image, current_image=current_image)
+    return render_template('index.html', gun_exists=gun_exists, image_path=current_image, current_image=current_image)
 
 @app.route('/next_image', methods=['POST'])
 def next_image():
@@ -22,7 +22,7 @@ def next_image():
     # For example:
     # current_image = "/static/next-image.jpg"
 
-    return render_template('your_template.html', gun_exists="New text", image_path=current_image, current_image=current_image)
+    return render_template('index.html', gun_exists="New text", image_path=current_image, current_image=current_image)
 
 if __name__ == '__main__':
     app.run()
