@@ -1,4 +1,6 @@
 # ThreatTrace AI: Your Solution for Swift Violence Detection
+Check out our Devpost submission for a demo of ThreatTrace AI: [Devpost - ThreatTrace AI](https://devpost.com/software/threattrace-ai)
+
 ## ThreatTrace AI eliminates the need for constant human monitoring of camera footage, facilitating faster threat identification and enhanced safety.
 
 ## Inspiration
