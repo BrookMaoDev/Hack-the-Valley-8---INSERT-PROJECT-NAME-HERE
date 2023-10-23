@@ -19,5 +19,5 @@ We're proud of the progress made from utilizing machine learning APIs such as Te
 ## What We Learned
 We have learned about numerous new technical knowledge regarding libraries, packages, and technologies such as TensorFlow, virtual environments, GitHub, CocoAPI, and ObjectDetectionAPI. Since three of our members use Windows as the main operating system, we had to utilize both the Windows and the bash terminals to set up our repository. Through our numerous trials, we have also learned about the vast amount of time it takes to train a machine learning model and dataset before being able to make use of it. Finally, the most important lesson we have learned was team collaboration, as each of us has made use of our strengths, and we utilized our abilities well to facilitate this project.
 
-# What's Next for ThreatTrace AI
+## What's Next for ThreatTrace AI
 Our goal is to continue training our learning model to accept more weapons at different lighting levels and angles, so that our dataset can be more refined as time goes. Then we will transition into training video footages with the learning model. Ultimately, we will reach our original vision of a real-time video violence detection AI.
