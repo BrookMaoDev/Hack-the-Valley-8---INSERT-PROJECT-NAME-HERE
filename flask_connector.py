@@ -13,7 +13,7 @@ current_image = folder_path + file_names[0]
 
 @app.route("/")
 def home():
-    return render_template("home.html")
+    return render_template("index.html")
 
 
 @app.route("/next_image", methods=["POST"])
@@ -25,7 +25,7 @@ def next_image():
     current_image = folder_path + file_names[current_index]
 
     return render_template(
-        "picture_rotator.html",
+        "demo.html",
         gun_exists="Gun Exists",
         image_path=current_image,
         current_image=current_image,
@@ -41,7 +41,7 @@ def prev_image():
     current_image = folder_path + file_names[current_index]
 
     return render_template(
-        "picture_rotator.html",
+        "demo.html",
         gun_exists="Gun Exists",
         image_path=current_image,
         current_image=current_image,

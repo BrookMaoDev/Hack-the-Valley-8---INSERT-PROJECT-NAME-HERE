@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+    <head>
+        <!-- ... (head content) ... -->
+        <link
+            href="https://fonts.googleapis.com/css?family=Quicksand&display=swap"
+            rel="stylesheet"
+        />
+        <title>ThreatTrace AI</title>
+        <style>
+            html,
+            body {
+                font-family: "Quicksand", normal;
+                text-align: center;
+                background: linear-gradient(to bottom right, #f8efeb, #f1c3ab);
+                margin: 0;
+                height: 100%;
+            }
+
+            header {
+                font-size: 50px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100px;
+                font-weight: 600;
+                color: #e48254;
+                margin: 0px;
+                padding: 0;
+            }
+
+            button {
+                margin: 7px;
+                font-family: "Quicksand", normal;
+                display: inline-block;
+            }
+
+            form {
+                align-items: center;
+                justify-content: center;
+                display: inline-block;
+            }
+        </style>
+    </head>
+
+    <header>ThreatTrace AI</header>
+
+    <body>
+        <div style="text-align: center">
+            <img src="{{ image_path }}" alt="Image" width="500" />
+            <p style="color: black; font-size: 36px">{{ gun_exists }}</p>
+            <form method="POST" action="/prev_image">
+                <input
+                    type="hidden"
+                    name="current_image"
+                    value="{{ current_image }}"
+                />
+                <button
+                    type="submit"
+                    style="
+                        background: Violet;
+                        color: white;
+                        padding: 10px 20px;
+                        font-size: 18px;
+                        border: none;
+                        cursor: pointer;
+                    "
+                >
+                    Prev Image
+                </button>
+            </form>
+
+            <form method="POST" action="/next_image">
+                <input
+                    type="hidden"
+                    name="current_image"
+                    value="{{ current_image }}"
+                />
+                <button
+                    type="submit"
+                    style="
+                        background: Violet;
+                        color: white;
+                        padding: 10px 20px;
+                        font-size: 18px;
+                        border: none;
+                        cursor: pointer;
+                    "
+                >
+                    Next Image
+                </button>
+            </form>
+        </div>
+    </body>
+</html>
