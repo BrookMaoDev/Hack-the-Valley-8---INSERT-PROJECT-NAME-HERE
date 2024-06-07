@@ -1,52 +1,28 @@
-from flask import Flask, render_template, request
-import os
-import random
+from flask import Flask, render_template
+import tensorflow as tf
+import tensorflow_datasets as tfds
 
 app = Flask(__name__)
 
-folder_path = "static/images/pistols_jpgs/"
-file_names = os.listdir(folder_path)
+# Set the shuffle seed to match the one used during model training
+SHUFFLE_SEED = 42
 
-current_index = random.randint(100, 900)
-current_image = folder_path + file_names[0]
+# Ensuring we get only a small portion of the validation data
+sample_dataset, info = tfds.load(
+    name="malaria",
+    split=["train[80%:81%]"],
+    shuffle_files=True,
+    as_supervised=True,
+    with_info=True,
+    read_config=tfds.ReadConfig(shuffle_seed=SHUFFLE_SEED),
+)
 
 
 @app.route("/")
-def home():
+def index():
     return render_template("index.html")
 
 
-@app.route("/next_image", methods=["POST"])
-def next_image():
-    global current_image
-    global current_index
-
-    current_index += 1
-    current_image = folder_path + file_names[current_index]
-
-    return render_template(
-        "demo.html",
-        gun_exists="Gun Exists",
-        image_path=current_image,
-        current_image=current_image,
-    )
-
-
-@app.route("/prev_image", methods=["POST"])
-def prev_image():
-    global current_image
-    global current_index
-
-    current_index -= 1
-    current_image = folder_path + file_names[current_index]
-
-    return render_template(
-        "demo.html",
-        gun_exists="Gun Exists",
-        image_path=current_image,
-        current_image=current_image,
-    )
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
+@app.route("/demo")
+def demo():
+    return render_template("model_demo.html")

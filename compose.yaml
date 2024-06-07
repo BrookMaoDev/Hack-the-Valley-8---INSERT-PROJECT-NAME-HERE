@@ -1,0 +1,11 @@
+services:
+  app:
+    # Specifies the name of the container
+    container_name: malaria_ml_app
+    # Specifies that we want to build the Docker image from the current directory
+    build: .
+    # Specifies the name of the Docker image
+    image: malaria_ml_app
+    # Maps port 80 on the host to port 5000 on the container, allowing access to the Flask app
+    ports:
+      - "80:5000"

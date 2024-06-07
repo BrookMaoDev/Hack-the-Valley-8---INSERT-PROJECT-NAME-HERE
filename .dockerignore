@@ -1,0 +1,6 @@
+.gitignore
+Dockerfile
+*.sh
+*.ipynb
+*.md
+.dockerignore

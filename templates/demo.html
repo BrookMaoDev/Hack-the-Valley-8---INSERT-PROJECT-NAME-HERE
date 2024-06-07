@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ThreatTrace AI</title>
+    <title>ThreatTrace AI - Demo</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body
@@ -33,16 +33,26 @@
       </nav>
     </header>
     <section>
-      <h2>Malaria Cell Classification Neural Network</h2>
+      <h2>Neural Network Demo</h2>
       <p>
-        This neural network can classify cells as parasitized by malaria or
-        uninfected with 95.45% accuracy.
+        The images below are from the validation dataset, meaning the neural
+        network hasn't been trained on these yet.
       </p>
+      <div class="demo-container">
+        <div class="image-container">
+          <img src="{{ image_url }}" alt="Validation Image" />
+        </div>
+        <div class="info-container">
+          <p><strong>Cell Is:</strong> {{ proper_label }}</p>
+          <p><strong>AI Prediction:</strong> {{ prediction }}</p>
+          <p><strong>Confidence:</strong> {{ confidence }}%</p>
+        </div>
+      </div>
       <div class="button-container">
-        <button onclick="window.location.href='/demo'">Demo</button>
-        <button onclick="window.location.href='/try-it-yourself'">
-          Try It Yourself
+        <button onclick="window.location.href='/demo/previous'">
+          Previous Image
         </button>
+        <button onclick="window.location.href='/demo/next'">Next Image</button>
       </div>
     </section>
   </body>
