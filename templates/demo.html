@@ -4,14 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ThreatTrace AI - Demo</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
   </head>
   <body
     style="
-      background-image: url(&quot;neural_network_background_dimmed.jpg&quot;);
-      background-size: cover;
-      background-position: center;
-    "
+            background-image: url('{{ url_for('static', filename='neural_network_background_dimmed.jpg') }}');
+            background-size: cover;
+            background-position: center;
+        "
   >
     <header>
       <div class="logo">
@@ -19,9 +22,11 @@
       </div>
       <nav>
         <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/demo">Demo</a></li>
-          <li><a href="/try-it-yourself">Try It Yourself</a></li>
+          <li><a href="{{ url_for('index') }}">Home</a></li>
+          <li><a href="{{ url_for('demo') }}">Demo</a></li>
+          <li>
+            <a href="{{ url_for('try_it_yourself') }}">Try It Yourself</a>
+          </li>
           <li>
             <a
               href="https://github.com/BrookMaoDev/threat-trace-ai-hackthevalley8"
@@ -49,10 +54,12 @@
         </div>
       </div>
       <div class="button-container">
-        <button onclick="window.location.href='/demo/previous'">
+        <button onclick="window.location.href='{{ url_for('demo') }}'">
           Previous Image
         </button>
-        <button onclick="window.location.href='/demo/next'">Next Image</button>
+        <button onclick="window.location.href='{{ url_for('demo') }}'">
+          Next Image
+        </button>
       </div>
     </section>
   </body>
