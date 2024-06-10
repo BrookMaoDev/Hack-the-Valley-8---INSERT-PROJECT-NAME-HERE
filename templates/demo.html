@@ -1,66 +1,63 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ThreatTrace AI - Demo</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='styles.css') }}"
-    />
-  </head>
-  <body
-    style="
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ThreatTrace AI - Demo</title>
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='styles.css') }}"
+        />
+    </head>
+    <body
+        style="
             background-image: url('{{ url_for('static', filename='neural_network_background_dimmed.jpg') }}');
             background-size: cover;
             background-position: center;
         "
-  >
-    <header>
-      <div class="logo">
-        <h1>ThreatTrace AI</h1>
-      </div>
-      <nav>
-        <ul>
-          <li><a href="{{ url_for('index') }}">Home</a></li>
-          <li><a href="{{ url_for('demo') }}">Demo</a></li>
-          <li>
-            <a href="{{ url_for('try_it_yourself') }}">Try It Yourself</a>
-          </li>
-          <li>
-            <a
-              href="https://github.com/BrookMaoDev/threat-trace-ai-hackthevalley8"
-              target="_blank"
-              >GitHub</a
-            >
-          </li>
-        </ul>
-      </nav>
-    </header>
-    <section>
-      <h2>Neural Network Demo</h2>
-      <p>
-        The images below are from the validation dataset, meaning the neural
-        network hasn't been trained on these yet.
-      </p>
-      <div class="demo-container">
-        <div class="image-container">
-          <img src="{{ image_url }}" alt="Validation Image" />
-        </div>
-        <div class="info-container">
-          <p><strong>Cell Is:</strong> {{ proper_label }}</p>
-          <p><strong>AI Prediction:</strong> {{ prediction }}</p>
-          <p><strong>Confidence:</strong> {{ confidence }}%</p>
-        </div>
-      </div>
-      <div class="button-container">
-        <button onclick="window.location.href='{{ url_for('demo') }}'">
-          Previous Image
-        </button>
-        <button onclick="window.location.href='{{ url_for('demo') }}'">
-          Next Image
-        </button>
-      </div>
-    </section>
-  </body>
+    >
+        <header>
+            <div class="logo">
+                <h1>ThreatTrace AI</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('demo') }}">Demo</a></li>
+                    <li>
+                        <a href="{{ url_for('try_it_yourself') }}"
+                            >Try It Yourself</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            href="https://github.com/BrookMaoDev/threat-trace-ai-hackthevalley8"
+                            target="_blank"
+                            >GitHub</a
+                        >
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <section>
+            <h2>Neural Network Demo</h2>
+            <p>
+                The images below are from the validation dataset, meaning the
+                neural network hasn't been trained on these yet.
+            </p>
+            <div class="demo-container">
+                <div class="image-container">
+                    <img src="{{ image_url }}" alt="Validation Image" />
+                </div>
+                <div class="info-container">
+                    <p><strong>Cell Is:</strong> {{ proper_label }}</p>
+                    <p><strong>AI Prediction:</strong> {{ prediction }}</p>
+                    <p><strong>Confidence:</strong> {{ confidence }}%</p>
+                </div>
+            </div>
+            <button onclick="window.location.href='{{ url_for('demo') }}'">
+                Try Another Image
+            </button>
+        </section>
+    </body>
 </html>

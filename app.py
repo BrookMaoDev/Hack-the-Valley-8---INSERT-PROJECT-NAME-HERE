@@ -4,6 +4,7 @@ import tensorflow_datasets as tfds
 import base64
 from io import BytesIO
 from PIL import Image
+import random
 
 app = Flask(__name__)
 
@@ -20,13 +21,19 @@ sample_dataset, info = tfds.load(
     read_config=tfds.ReadConfig(shuffle_seed=SHUFFLE_SEED),
 )
 
+# Get the number of elements in the dataset
+num_elements = tf.data.experimental.cardinality(sample_dataset[0]).numpy()
+
+print("num_elements")
+print(num_elements)
+
 # Extracting the class labels
 class_labels = info.features["label"].int2str
 
 
 # Function to get an image and its label from the dataset
-def get_image_and_label():
-    for image, label in sample_dataset[0].take(1):
+def get_image_and_label(skip_by: int):
+    for image, label in sample_dataset[0].skip(skip_by).take(1):
         return image.numpy(), class_labels(label.numpy())
 
 
@@ -45,7 +52,9 @@ def index():
 
 @app.route("/demo")
 def demo():
-    image, proper_label = get_image_and_label()
+    image_index = random.randint(0, num_elements - 1)
+
+    image, proper_label = get_image_and_label(image_index)
     image_base64 = image_to_base64(image)
     image_url = f"data:image/png;base64,{image_base64}"
 
