@@ -16,5 +16,5 @@ COPY . .
 # Expose port 5000 to allow external access to the application
 EXPOSE 5000
 
-# Run the Flask server with --host=0.0.0.0 to make it externally accessible
-CMD ["flask", "run", "--host=0.0.0.0"]
+# Run the application
+CMD ["python", "app.py"]

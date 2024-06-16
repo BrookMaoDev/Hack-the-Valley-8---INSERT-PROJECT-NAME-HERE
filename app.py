@@ -1,48 +1,35 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, request
 import tensorflow as tf
-import tensorflow_datasets as tfds
-import base64
-from io import BytesIO
-from PIL import Image
+from tensorflow.keras.preprocessing.image import load_img, img_to_array
+import numpy as np
+import os
 import random
+import logging
 
 app = Flask(__name__)
 
-# Set the shuffle seed to match the one used during model training
-SHUFFLE_SEED = 42
+model = tf.keras.models.load_model("model")
+SAMPLE_IMAGES_DIR = "static/sample_dataset"
+UPLOAD_FOLDER = "static/uploads"
+EXPECTED_IMAGE_SIZE = (128, 128)
 
-# Ensuring we get only a small portion of the validation data
-sample_dataset, info = tfds.load(
-    name="malaria",
-    split=["train[80%:81%]"],
-    shuffle_files=True,
-    as_supervised=True,
-    with_info=True,
-    read_config=tfds.ReadConfig(shuffle_seed=SHUFFLE_SEED),
-)
-
-# Get the number of elements in the dataset
-num_elements = tf.data.experimental.cardinality(sample_dataset[0]).numpy()
-
-print("num_elements")
-print(num_elements)
-
-# Extracting the class labels
-class_labels = info.features["label"].int2str
+logging.basicConfig(level=logging.DEBUG)
 
 
-# Function to get an image and its label from the dataset
-def get_image_and_label(skip_by: int):
-    for image, label in sample_dataset[0].skip(skip_by).take(1):
-        return image.numpy(), class_labels(label.numpy())
+def get_image_and_label():
+    filename = random.choice(os.listdir(SAMPLE_IMAGES_DIR))
+    filepath = os.path.join(SAMPLE_IMAGES_DIR, filename)
+    label = "parasitized" if filename.split("_")[0] == "0" else "uninfected"
+    return filepath, label
 
 
-# Function to convert the image to base64
-def image_to_base64(image):
-    pil_image = Image.fromarray(image)
-    buffered = BytesIO()
-    pil_image.save(buffered, format="PNG")
-    return base64.b64encode(buffered.getvalue()).decode("utf-8")
+def preprocess_image(image_path: str):
+    img = load_img(image_path, target_size=EXPECTED_IMAGE_SIZE)
+    img_array = img_to_array(img)
+    img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
+    img_array = img_array / 255.0  # Normalize the image
+
+    return img_array
 
 
 @app.route("/")
@@ -52,24 +39,66 @@ def index():
 
 @app.route("/demo")
 def demo():
-    image_index = random.randint(0, num_elements - 1)
+    image_url, proper_label = get_image_and_label()
+    img_array = preprocess_image(image_url)
+    prediction = model.predict(img_array)
+    confidence = tf.math.sigmoid(prediction[0][0]).numpy()
 
-    image, proper_label = get_image_and_label(image_index)
-    image_base64 = image_to_base64(image)
-    image_url = f"data:image/png;base64,{image_base64}"
-
-    prediction = "Parasitized"  # Hardcoded for now
-    confidence = "95.45"  # Hardcoded for now
+    if confidence > 0.5:
+        prediction_label = "uninfected"
+    else:
+        prediction_label = "parasitized"
+        confidence = 1 - confidence
 
     return render_template(
         "demo.html",
         image_url=image_url,
         proper_label=proper_label,
-        prediction=prediction,
+        prediction=prediction_label,
         confidence=confidence,
     )
 
 
-@app.route("/try")
+@app.route("/try", methods=["GET", "POST"])
 def try_it_yourself():
-    return "Try It Yourself Page"
+    logging.debug(request.files)
+
+    if "file" not in request.files:
+        logging.debug("file not in request.files")
+        return render_template("try.html")
+
+    file = request.files["file"]
+
+    if file.filename == "":
+        logging.debug('file.filename == ""')
+        return render_template("try.html")
+
+    if file:
+        filepath = os.path.join(UPLOAD_FOLDER, file.filename)
+        file.save(filepath)
+
+        img_array = preprocess_image(filepath)
+        prediction = model.predict(img_array)
+        logging.debug(f"prediction: {prediction}")
+
+        confidence = tf.math.sigmoid(prediction[0][0]).numpy()
+        logging.debug(f"confidence: {confidence}")
+
+        if confidence > 0.5:
+            prediction_label = "uninfected"
+        else:
+            prediction_label = "parasitized"
+            confidence = 1 - confidence
+
+        logging.debug(filepath)
+
+        return render_template(
+            "try.html",
+            image_url=filepath,
+            prediction=prediction_label,
+            confidence=confidence,
+        )
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
