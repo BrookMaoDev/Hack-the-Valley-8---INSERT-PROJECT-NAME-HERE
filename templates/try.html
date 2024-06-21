@@ -4,56 +4,88 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ThreatTrace AI</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='styles.css') }}"
-    />
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="icon" type="image/png" href="/static/favicon.png" />
+    <script src="/static/scripts.js" charset="UTF-8"></script>
   </head>
-  <body
-    style="
-            background-image: url('{{ url_for('static', filename='neural_network_background_dimmed.jpg') }}');
-            background-size: cover;
-            background-position: center;
-        "
-  >
-    <header>
-      <div class="logo">
-        <h1>ThreatTrace AI</h1>
-      </div>
-      <nav>
-        <ul>
-          <li><a href="{{ url_for('index') }}">Home</a></li>
-          <li><a href="{{ url_for('demo') }}">Demo</a></li>
-          <li>
-            <a href="{{ url_for('try_it_yourself') }}">Try It Yourself</a>
-          </li>
-          <li>
-            <a
-              href="https://github.com/BrookMaoDev/threat-trace-ai-hackthevalley8"
-              target="_blank"
-              >GitHub</a
-            >
-          </li>
-        </ul>
-      </nav>
-    </header>
-    <section>
-      <h2>Neural Network Demo</h2>
-      <p>Upload Your Own Image</p>
-      <div class="demo-container">
-        <div class="image-container">
-          <img src="{{ image_url }}" alt="Validation Image" />
+  <body>
+    <nav class="navbar">
+      <a href="/">Home</a><a href="/demo">Demo</a><a class="selected">Try</a>
+    </nav>
+    <div class="centered-content">
+      <div class="spacer"></div>
+      <h1>Try It Out 😎</h1>
+      <div class="spacer"></div>
+      <p>
+        Upload your images to see our model's prediction for malaria infection
+        status and evaluate its accuracy. Not sure which pictures to use?
+        Download some from
+        <a
+          href="https://www.kaggle.com/datasets/iarunava/cell-images-for-detecting-malaria#:~:text=Healthcare-,cell_images,-(2%20directories"
+          target="_blank"
+          rel="noopener noreferrer"
+          >this dataset</a
+        >
+        and upload them here to test the model's performance.
+      </p>
+      <div class="spacer"></div>
+      <div class="two-column">
+        <img
+          id="predict-image"
+          class="predict-image"
+          alt="Image of a Cell"
+          src="/static/placeholder.png"
+        />
+        <div class="prediction-text">
+          <p>
+            The raw neural network output is
+            <b id="raw-output">❓</b>, which translates to a
+            <b id="healthy-probability">❓</b> probability of being healthy.
+          </p>
+          <p>
+            The AI predicts this cell is
+            <b id="prediction">❓</b> with <b id="confidence">❓</b> confidence.
+          </p>
         </div>
-        <div class="info-container">
-          <p><strong>Cell Is:</strong> {{ proper_label }}</p>
-          <p><strong>AI Prediction:</strong> {{ prediction }}</p>
-          <p><strong>Confidence:</strong> {{ confidence }}%</p>
-        </div>
       </div>
-      <form action="/try" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" accept="image/*" />
-        <input type="submit" value="Upload and Predict" />
-      </form>
-    </section>
+      <div class="spacer"></div>
+      <div class="file-input-wrapper">
+        <input
+          id="file-input"
+          class="file-input"
+          name="file"
+          type="file"
+          accept="image/*"
+          onchange="uploadAndPredict()"
+        />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="1em"
+          height="1em"
+          stroke-linejoin="round"
+          stroke-linecap="round"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          fill="none"
+          stroke="currentColor"
+          class="file-icon"
+        >
+          <polyline points="16 16 12 12 8 16"></polyline>
+          <line y2="21" x2="12" y1="12" x1="12"></line>
+          <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path>
+          <polyline points="16 16 12 12 8 16"></polyline>
+        </svg>
+      </div>
+      <div class="spacer"></div>
+    </div>
+    <footer>
+      Discover our model's functionality and explore the source code on
+      <a
+        href="https://github.com/BrookMaoDev/ThreatTraceAI"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub</a
+      >!
+    </footer>
   </body>
 </html>

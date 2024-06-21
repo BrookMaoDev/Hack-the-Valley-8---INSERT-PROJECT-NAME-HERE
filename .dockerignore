@@ -1,6 +1,16 @@
+# Ignore Git and Docker related files
 .gitignore
-Dockerfile
-*.sh
-*.ipynb
-*.md
 .dockerignore
+Dockerfile
+
+# Ignore script files
+*.sh
+
+# Ignore notebook files
+*.ipynb
+
+# Ignore markdown files
+*.md
+
+# Ignore YAML files
+*.yml

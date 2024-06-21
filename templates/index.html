@@ -4,55 +4,42 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ThreatTrace AI</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='styles.css') }}"
-    />
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="icon" type="image/png" href="/static/favicon.png" />
   </head>
-  <body
-    style="
-            background-image: url('{{ url_for('static', filename='neural_network_background_dimmed.jpg') }}');
-            background-size: cover;
-            background-position: center;
-        "
-  >
-    <header>
-      <div class="logo">
-        <h1>ThreatTrace AI</h1>
-      </div>
-      <nav>
-        <ul>
-          <li><a href="{{ url_for('index') }}">Home</a></li>
-          <li><a href="{{ url_for('demo') }}">Demo</a></li>
-          <li>
-            <a href="{{ url_for('try_it_yourself') }}">Try It Yourself</a>
-          </li>
-          <li>
-            <a
-              href="https://github.com/BrookMaoDev/threat-trace-ai-hackthevalley8"
-              target="_blank"
-              >GitHub</a
-            >
-          </li>
-        </ul>
-      </nav>
-    </header>
-    <section>
-      <h2>Malaria Cell Classification Neural Network</h2>
+  <body>
+    <nav class="navbar">
+      <a class="selected">Home</a><a href="/demo">Demo</a><a href="/try">Try</a>
+    </nav>
+    <div class="centered-content">
+      <h1 id="big-title">ThreatTrace AI</h1>
+      <div class="spacer"></div>
       <p>
-        This neural network can classify cells as parasitized by malaria or
-        uninfected with 95.45% accuracy.
-      </p>
-      <div class="button-container">
-        <button onclick="window.location.href='{{ url_for('demo') }}'">
-          Demo
-        </button>
-        <button
-          onclick="window.location.href='{{ url_for('try_it_yourself') }}'"
+        A convolutional neural network trained on the
+        <a
+          href="https://www.tensorflow.org/datasets/catalog/malaria"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Malaria dataset</a
         >
-          Try It Yourself
-        </button>
+        from TensorFlow. Classifies thin blood smear images of cells as healthy
+        or malaria-parasitized with <b>95.45%</b> accuracy.
+      </p>
+      <div class="spacer"></div>
+      <div class="button-container">
+        <a class="fancy-button" href="/demo">Demo</a>
+        <a class="fancy-button" href="/try">Try It Out</a>
       </div>
-    </section>
+      <div class="spacer"></div>
+    </div>
+    <footer>
+      Discover our model's functionality and explore the source code on
+      <a
+        href="https://github.com/BrookMaoDev/ThreatTraceAI"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub</a
+      >!
+    </footer>
   </body>
 </html>

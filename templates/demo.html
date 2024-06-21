@@ -4,58 +4,70 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ThreatTrace AI</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='styles.css') }}"
-    />
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="icon" type="image/png" href="/static/favicon.png" />
+    <script src="/static/scripts.js" charset="UTF-8"></script>
   </head>
-  <body
-    style="
-            background-image: url('{{ url_for('static', filename='neural_network_background_dimmed.jpg') }}');
-            background-size: cover;
-            background-position: center;
-        "
-  >
-    <header>
-      <div class="logo">
-        <h1>ThreatTrace AI</h1>
-      </div>
-      <nav>
-        <ul>
-          <li><a href="{{ url_for('index') }}">Home</a></li>
-          <li><a href="{{ url_for('demo') }}">Demo</a></li>
-          <li>
-            <a href="{{ url_for('try_it_yourself') }}">Try It Yourself</a>
-          </li>
-          <li>
-            <a
-              href="https://github.com/BrookMaoDev/threat-trace-ai-hackthevalley8"
-              target="_blank"
-              >GitHub</a
-            >
-          </li>
-        </ul>
-      </nav>
-    </header>
-    <section>
-      <h2>Neural Network Demo</h2>
+  <body onload="nextImage()">
+    <nav class="navbar">
+      <a href="/">Home</a><a class="selected">Demo</a><a href="/try">Try</a>
+    </nav>
+    <div class="centered-content">
+      <div class="spacer"></div>
+      <h1>Neural Network Demo 🧠</h1>
+      <div class="spacer"></div>
       <p>
-        The images below are from the validation dataset, meaning the neural
-        network hasn't been trained on these yet.
+        The following images are from our validation dataset, which the model
+        has not seen yet. The raw output of the neural network is positive when
+        predicting the image is a healthy cell and negative for parasitized
+        cells. This output is transformed using a
+        <a
+          href="https://en.wikipedia.org/wiki/Sigmoid_function"
+          target="_blank"
+          rel="noopener noreferrer"
+          >sigmoid function</a
+        >
+        to calculate the probability of the cell being healthy.
       </p>
-      <div class="demo-container">
-        <div class="image-container">
-          <img src="{{ image_url }}" alt="Validation Image" />
-        </div>
-        <div class="info-container">
-          <p><strong>Cell Is:</strong> {{ proper_label }}</p>
-          <p><strong>AI Prediction:</strong> {{ prediction }}</p>
-          <p><strong>Confidence:</strong> {{ confidence }}%</p>
+      <div class="spacer"></div>
+      <div class="two-column">
+        <img id="predict-image" class="predict-image" alt="Image of a Cell" />
+        <div class="prediction-text">
+          <p>
+            This is a picture of a
+            <b id="proper-label">❓</b> cell.
+          </p>
+          <p>
+            The raw neural network output is
+            <b id="raw-output">❓</b>, which translates to a
+            <b id="healthy-probability">❓</b> probability of being healthy.
+          </p>
+          <p>
+            The AI predicts this cell is
+            <b id="prediction">❓</b> with <b id="confidence">❓</b> confidence,
+            making it <b id="correctness">❓</b>.
+          </p>
         </div>
       </div>
-      <button onclick="window.location.href='{{ url_for('demo') }}'">
+      <div class="spacer"></div>
+      <button
+        type="button"
+        id="next-image-button"
+        class="simple-button"
+        onclick="nextImage()"
+      >
         Try Another Image
       </button>
-    </section>
+      <div class="spacer"></div>
+    </div>
+    <footer>
+      Discover our model's functionality and explore the source code on
+      <a
+        href="https://github.com/BrookMaoDev/ThreatTraceAI"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub</a
+      >!
+    </footer>
   </body>
 </html>
