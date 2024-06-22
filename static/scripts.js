@@ -5,6 +5,7 @@ const GREEN = "#a4f6a5";
 const RED = "#f68787";
 const CORRECT = "correct";
 const INCORRECT = "incorrect";
+const SPINNER = '<i class="c-inline-spinner"></i>';
 
 /**
  * Fetches a random image path and its corresponding label from the server.
@@ -32,24 +33,38 @@ async function getPrediction(imagePath) {
 }
 
 /**
- * Uploads an image file from an input element to the server.
- * @returns {Promise<object|boolean>} The server response containing the image data or false if no files were selected.
+ * Uploads an image file to the server.
+ * @param {file} file The file to upload.
+ * @returns {Promise<object>} The server response containing the image data.
  */
-async function uploadImage() {
-  const files = document.getElementById("file-input").files;
-
-  if (files.length === 0) {
-    return false;
-  }
-
+async function uploadImage(file) {
   const data = new FormData();
-  data.append("file", files[0]);
+  data.append("file", file);
 
   const response = await fetch("/upload", {
     method: "POST",
     body: data,
   });
   return await response.json();
+}
+
+/**
+ * Replaces the innerHTML of prediction labels with Bootstrap spinners.
+ */
+function showPredictionSpinners() {
+  document.getElementById("raw-output").innerHTML = SPINNER;
+  document.getElementById("healthy-probability").innerHTML = SPINNER;
+  document.getElementById("prediction").innerHTML = SPINNER;
+  document.getElementById("confidence").innerHTML = SPINNER;
+}
+
+/**
+ * Replaces the innerHTML of prediction labels, image label, and model correctness with Bootstrap spinners.
+ */
+function showAllSpinners() {
+  document.getElementById("proper-label").innerHTML = SPINNER;
+  showPredictionSpinners();
+  document.getElementById("correctness").innerHTML = SPINNER;
 }
 
 /**
@@ -113,6 +128,8 @@ async function nextImage() {
   const submitButton = document.getElementById("next-image-button");
   submitButton.disabled = true;
 
+  showAllSpinners(); // Replace old content with spinners
+
   const imagePathAndLabel = await getRandomImageAndLabel();
   showImage(imagePathAndLabel["filepath"]);
   showProperLabel(imagePathAndLabel["proper_label"]);
@@ -136,12 +153,15 @@ async function nextImage() {
  * Uploads an image and displays its prediction results.
  */
 async function uploadAndPredict() {
-  const imageData = await uploadImage();
+  const files = document.getElementById("file-input").files;
 
-  if (imageData === false) {
+  if (files.length === 0) {
     return;
   }
 
+  showPredictionSpinners(); // Replace old content with spinners
+
+  const imageData = await uploadImage(files[0]);
   showImage(imageData["filepath"]);
 
   const predictionInfo = await getPrediction(imageData["filepath"]);
