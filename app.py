@@ -6,6 +6,7 @@ from numpy import expand_dims
 from numpy.typing import NDArray
 from os import listdir
 from os.path import join, isfile
+from tempfile import mkdtemp
 from random import choice
 from math import e
 
@@ -14,7 +15,6 @@ model = load_model("model")
 
 # Constants
 SAMPLE_IMAGES_DIR = "static/sample_dataset"
-UPLOAD_FOLDER = "static/uploads"
 EXPECTED_IMAGE_SIZE = (128, 128)
 HEALTHY_LABEL = "healthy"
 PARASITIZED_LABEL = "parasitized"
@@ -22,10 +22,10 @@ PARASITIZED_LABEL = "parasitized"
 
 def get_image_path_and_label() -> tuple[str, str]:
     """
-    Selects a random image from the sample dataset and determines its label based on the filename.
+    Selects a random image from the sample dataset directory and determines its label.
 
     Returns:
-        tuple[str, str]: The filepath and the label of the selected image.
+        tuple[str, str]: A tuple containing the file path of the image and its label.
     """
     filename = choice(listdir(SAMPLE_IMAGES_DIR))
     filepath = join(SAMPLE_IMAGES_DIR, filename)
@@ -35,43 +35,44 @@ def get_image_path_and_label() -> tuple[str, str]:
 
 def preprocess_image(image_path: str) -> NDArray:
     """
-    Loads and preprocesses an image for prediction.
+    Loads and preprocesses an image for model prediction.
 
     Args:
-        image_path (str): The path to the image.
+        image_path (str): The file path of the image to preprocess.
 
     Returns:
-        NDArray: The preprocessed image array.
+        NDArray: The preprocessed image as a numpy array.
     """
     img = load_img(image_path, target_size=EXPECTED_IMAGE_SIZE)
     img_array = img_to_array(img)
     img_array = expand_dims(img_array, axis=0)
-    img_array /= 255.0
+    img_array /= 255.0  # Normalize the image to [0, 1]
     return img_array
 
 
 def sigmoid(x: float) -> float:
     """
-    Applies the sigmoid function to a value.
+    Computes the sigmoid function for the given input.
 
     Args:
         x (float): The input value.
 
     Returns:
-        float: The result of the sigmoid function.
+        float: The output of the sigmoid function.
     """
     return 1 / (1 + e**-x)
 
 
-def predict(img_array: NDArray) -> tuple[float, float, str, float]:
+def predict(img_array: NDArray) -> dict:
     """
-    Predicts the label of an image using the loaded model.
+    Predicts the label for a given preprocessed image array.
 
     Args:
         img_array (NDArray): The preprocessed image array.
 
     Returns:
-        tuple[float, float, str, float]: The raw output, probability of being healthy, prediction label, and confidence.
+        dict: A dictionary containing the raw output, healthy probability,
+              prediction label, and confidence of the prediction.
     """
     logit = model.predict(img_array)[0][0].item()
     probability_healthy = sigmoid(logit)
@@ -83,55 +84,6 @@ def predict(img_array: NDArray) -> tuple[float, float, str, float]:
         prediction_label = PARASITIZED_LABEL
         confidence = 1 - probability_healthy
 
-    return logit, probability_healthy, prediction_label, confidence
-
-
-@app.route("/")
-def index():
-    """Renders the index page."""
-    return render_template("index.html")
-
-
-@app.route("/demo")
-def render_demo():
-    """Renders the demo page."""
-    return render_template("demo.html")
-
-
-@app.route("/try")
-def render_try():
-    """Renders the try page."""
-    return render_template("try.html")
-
-
-@app.route("/get-image-path-and-label")
-def return_image_path_and_label():
-    """
-    Returns a random image path and its correct label.
-
-    Returns:
-        dict: A dictionary containing the filepath and the correct label.
-    """
-    filepath, label = get_image_path_and_label()
-    return {"filepath": filepath, "proper_label": label}
-
-
-@app.route("/predict", methods=["POST"])
-def return_prediction():
-    """
-    Returns the prediction for a given image.
-
-    Returns:
-        dict: A dictionary containing the raw output, probability of being healthy, prediction label, and confidence.
-    """
-    path = request.form["filepath"]
-
-    if not isfile(path):
-        return {"message": f"File does not exist: {path}"}
-
-    img_array = preprocess_image(path)
-    logit, probability_healthy, prediction_label, confidence = predict(img_array)
-
     return {
         "raw_output": logit,
         "healthy_probability": probability_healthy,
@@ -140,13 +92,57 @@ def return_prediction():
     }
 
 
-@app.route("/upload", methods=["POST"])
-def upload():
+@app.route("/")
+def index():
     """
-    Handles image file upload and saves it to the upload folder.
+    Renders the main index page.
+    """
+    return render_template("index.html")
 
-    Returns:
-        dict: A dictionary containing the filepath of the uploaded file.
+
+@app.route("/demo")
+def render_demo():
+    """
+    Renders the demo page.
+    """
+    return render_template("demo.html")
+
+
+@app.route("/try")
+def render_try():
+    """
+    Renders the try page.
+    """
+    return render_template("try.html")
+
+
+@app.route("/get-image-path-and-label")
+def return_image_path_and_label():
+    """
+    Returns a random image path and its proper label in JSON format.
+    """
+    filepath, label = get_image_path_and_label()
+    return {"filepath": filepath, "proper_label": label}
+
+
+@app.route("/predict", methods=["POST"])
+def return_prediction():
+    """
+    Returns the prediction for a given image file path in JSON format.
+    """
+    path = request.form["filepath"]
+
+    if not isfile(path):
+        return {"message": f"File does not exist: {path}"}
+
+    img_array = preprocess_image(path)
+    return predict(img_array)
+
+
+@app.route("/upload-and-predict", methods=["POST"])
+def upload_and_predict():
+    """
+    Handles image file upload, makes a prediction, and returns the result in JSON format.
     """
     if "file" not in request.files:
         return {"message": "No file part"}
@@ -157,10 +153,12 @@ def upload():
         return {"message": "No selected file"}
 
     filename = secure_filename(file.filename)
-    filepath = join(UPLOAD_FOLDER, filename)
+    temp_dir = mkdtemp()
+    filepath = join(temp_dir, filename)
     file.save(filepath)
 
-    return {"filepath": filepath}
+    img_array = preprocess_image(filepath)
+    return predict(img_array)
 
 
 if __name__ == "__main__":
