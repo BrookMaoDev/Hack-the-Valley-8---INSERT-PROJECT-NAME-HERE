@@ -4,7 +4,6 @@ ThreatTrace AI is a convolutional neural network trained on the [Malaria dataset
 
 ![Homepage](examples/homepage.png)
 _This is the homepage._
-
 [Try it out here!](https://threattrace.brookmaodev.me/)
 
 ![Demo Page](examples/demo.gif)
